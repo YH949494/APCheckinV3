@@ -2,7 +2,6 @@ import os
 from telegram import Update
 from telegram.ext import ApplicationBuilder, ContextTypes, MessageHandler, filters
 
-# Set your token here directly OR use environment variable
 TOKEN = os.getenv("TELEGRAM_TOKEN") or "YOUR_TELEGRAM_BOT_TOKEN"
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -17,11 +16,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         except Exception as e:
             print(f"Failed to delete message: {e}")
     else:
-        try:
-            await update.message.delete()
-            # You can add XP logic here
-        except Exception as e:
-            print(f"Failed to delete check-in message: {e}")
+        print(f"Valid check-in: {text}")
 
 if __name__ == "__main__":
     app = ApplicationBuilder().token(TOKEN).build()
