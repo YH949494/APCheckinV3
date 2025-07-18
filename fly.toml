@@ -1,17 +1,13 @@
 app = "telegram-checkin-bot-v3"
 
+primary_region = "sin"
+
 [env]
   TELEGRAM_TOKEN = "7620072160:AAEbty9W7vqZ5sgNAY8I0ACWYCIiNVrNZDs"
+  PYTHONUNBUFFERED = "1"
 
 [build]
-  dockerfile = "Dockerfile"
-
-
-[build]
-  image = "python:3.10"
-
-[env]
-  PORT = "8080"
+  image = "python:3.10-slim"
 
 [[services]]
   internal_port = 8080
