@@ -1,8 +1,10 @@
 app = "telegram-checkin-bot-v3"
-primary_region = "sin"
+
+[build]
+  image = "python:3.10"
 
 [env]
-  PYTHONUNBUFFERED = "1"
+  PORT = "8080"
 
 [[services]]
   internal_port = 8080
