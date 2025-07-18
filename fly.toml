@@ -1,5 +1,12 @@
 app = "telegram-checkin-bot-v3"
 
+[env]
+  TELEGRAM_TOKEN = "7620072160:AAEbty9W7vqZ5sgNAY8I0ACWYCIiNVrNZDs"
+
+[build]
+  dockerfile = "Dockerfile"
+
+
 [build]
   image = "python:3.10"
 
