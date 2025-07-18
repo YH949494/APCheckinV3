@@ -1,35 +1,30 @@
 import os
 from telegram import Update
 from telegram.ext import ApplicationBuilder, ContextTypes, MessageHandler, filters
-from flask import Flask, request
 
-TOKEN = os.getenv("TELEGRAM_TOKEN")
-WEBHOOK_PATH = f"/{TOKEN}"
-WEBHOOK_URL = f"https://telegram-checkin-bot-v3.fly.dev/{TOKEN}"
+# Set your token here directly OR use environment variable
+TOKEN = os.getenv("TELEGRAM_TOKEN") or "YOUR_TELEGRAM_BOT_TOKEN"
 
-app = Flask(__name__)
-
-telegram_app = ApplicationBuilder().token(TOKEN).build()
-
-# Only allow #checkin, delete others
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if update.message and update.message.text:
-        text = update.message.text.strip()
-        await update.message.delete()
+    if update.message is None or update.message.text is None:
+        return
 
-telegram_app.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), handle_message))
+    text = update.message.text.strip()
 
-@app.route(WEBHOOK_PATH, methods=["POST"])
-def webhook():
-    telegram_app.update_queue.put(Update.de_json(request.get_json(force=True), telegram_app.bot))
-    return "ok"
+    if not text.lower().startswith("#checkin"):
+        try:
+            await update.message.delete()
+        except Exception as e:
+            print(f"Failed to delete message: {e}")
+    else:
+        try:
+            await update.message.delete()
+            # You can add XP logic here
+        except Exception as e:
+            print(f"Failed to delete check-in message: {e}")
 
-@app.route("/")
-def home():
-    return "Bot is running!"
-
-# Set webhook on startup
 if __name__ == "__main__":
-    import asyncio
-    asyncio.run(telegram_app.bot.set_webhook(WEBHOOK_URL))
-    app.run(host="0.0.0.0", port=8080)
+    app = ApplicationBuilder().token(TOKEN).build()
+    app.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), handle_message))
+    print("Bot is running with long polling...")
+    app.run_polling()
