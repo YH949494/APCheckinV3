@@ -1,4 +1,4 @@
-app = "telegram-checkin-bot-V3"
+app = "telegram-checkin-bot-v3"
 primary_region = "sin"
 
 [env]
